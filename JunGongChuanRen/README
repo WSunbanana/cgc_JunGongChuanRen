@@ -1,0 +1,67 @@
+# README
+
+## 概述
+
+本项目实现了一个带有残差连接的图卷积网络（GCN），并且使用OpenMP进行并行优化。该项目的目的是对图数据进行特征提取，并优化计算性能。代码中实现了读取图数据、特征矩阵计算、激活函数、残差块、时间计时等功能。
+
+## 文件结构
+
+- `source_code.cpp`：主代码文件，包含GCN的实现和优化。
+- `Makefile`：编译和执行的配置文件。
+
+## 编译和运行
+
+### 环境要求
+
+- g++ 编译器，支持C++11标准。
+- OpenMP库。
+
+### 编译
+
+在终端中执行以下命令：
+
+```bash
+g++ -fopenmp -o gcn source_code.cpp
+```
+
+### 运行
+
+运行程序时需要提供以下参数：
+
+```bash
+./gcn <F0> <F1> <F2> <graph_file> <X0_file> <W1_file> <W2_file>
+```
+
+
+## 代码模块
+
+### 数据读取函数
+
+- `readGraph(char *fname)`：从文件中读取图数据。
+- `readFloat(char *fname, float *&dst, int num)`：读取二进制浮点数数据。
+
+### 数据预处理
+
+- `raw_graph_to_AdjacencyList()`：将原始图数据转换为邻接列表。
+- `edgeNormalization()`：边权值归一化。
+
+### 初始化和矩阵操作
+
+- `initFloat(float *&dst, int num)`：初始化浮点数数组。
+- `XW(int in_dim, int out_dim, float *in_X, float *out_X, float *W)`：特征矩阵与权重矩阵相乘。
+- `AX(int dim, float *in_X, float *out_X)`：邻接矩阵与特征矩阵相乘。
+- `ReLU(int dim, float *X)`：ReLU激活函数。
+- `LogSoftmax(int dim, float *X)`：LogSoftmax激活函数。
+- `MaxRowSum(float *X, int dim)`：计算每行的最大和。
+
+### 内存释放
+
+- `freeFloats()`：释放动态分配的内存。
+
+### 残差块函数
+
+- `residualBlock(int in_dim, int out_dim, float *in_X, float *out_X, float *W, bool apply_relu)`：实现带有残差连接的网络层。
+
+### 主函数
+
+- `main(int argc, char **argv)`：读取输入参数和数据文件，调用各模块进行计算，输出结果并计时。

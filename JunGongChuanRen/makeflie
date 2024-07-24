@@ -1,0 +1,2 @@
+all:
+	g++ -o ../jungongchuanren.exe source_code.cpp -O3 -fopenmp -std=c++11
